@@ -1,13 +1,13 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+import sqlalchemy as _sql
+import sqlalchemy.ext.declarative as _declarative
+import sqlalchemy.orm as _orm
 
+SQLALCHEMY_DATABASE_URL = "sqlite:///./database.db"
 
-SQLALCHAMY_DATABASE_URL = 'sqlite:///./blog.db'
+engine = _sql.create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
 
-engine = create_engine( SQLALCHAMY_DATABASE_URL, connect_args={"check_same_thread": False})
+SessionLocal = _orm.sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False,)
-
-Base = declarative_base()    
-
+Base = _declarative.declarative_base()
