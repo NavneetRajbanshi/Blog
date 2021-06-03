@@ -1,39 +1,30 @@
-from typing import List
-import datetime as _dt
-import pydantic as _pydantic
+from typing import List, Optional
+from pydantic import BaseModel
+from sqlalchemy.sql.sqltypes import Boolean
 
 
-class _PostBase(_pydantic.BaseModel):
+class task(BaseModel):
     title: str
-    content: str
+    body: str
 
-
-class PostCreate(_PostBase):
-    pass
-
-
-class Post(_PostBase):
-    id: int
-    owner_id: int
-    date_created: _dt.datetime
-    date_last_updated: _dt.datetime
-
-    class Config:
+class task(task):
+    class Config():
         orm_mode = True
 
 
-class _UserBase(_pydantic.BaseModel):
-    email: str
+class User(BaseModel):
+    first_name:str
+    last_name: str
+    user_name:str
+    email:str
+    password:str
+    status:str
 
-
-class UserCreate(_UserBase):
-    password: str
-
-
-class User(_UserBase):
-    id: int
-    is_active: bool
-    posts: List[Post] = []
-
-    class Config:
+class ShowUser(BaseModel):
+    first_name:str
+    last_name: str
+    user_name:str
+    email:str
+    
+    class Config():
         orm_mode = True

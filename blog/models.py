@@ -1,27 +1,32 @@
-import datetime as _dt
-import sqlalchemy as _sql
-import sqlalchemy.orm as _orm
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql.functions import user
+from passlib.context import CryptContext
 
-import database as _database
+from .database import Base
 
 
-class User(_database.Base):
+class User(Base):
     __tablename__ = "users"
-    id = _sql.Column(_sql.Integer, primary_key=True, index=True)
-    email = _sql.Column(_sql.String, unique=True, index=True)
-    hashed_password = _sql.Column(_sql.String)
-    is_active = _sql.Column(_sql.Boolean, default=True)
 
-    posts = _orm.relationship("Post", back_populates="owner")
+    id = Column(Integer, primary_key=True, index=True)
+    first_name = Column(String, unique=True, index=True)
+    last_name = Column(String, unique=True, index=True)
+    user_name = Column(String, unique=True, index=True)
+    email = Column(String, unique=True, index=True)
+    password = Column(String)
+    status = Column(String)
+
+    task = relationship("task", back_populates="owner")
 
 
-class Post(_database.Base):
-    __tablename__ = "posts"
-    id = _sql.Column(_sql.Integer, primary_key=True, index=True)
-    title = _sql.Column(_sql.String, index=True)
-    content = _sql.Column(_sql.String, index=True)
-    owner_id = _sql.Column(_sql.Integer, _sql.ForeignKey("users.id"))
-    date_created = _sql.Column(_sql.DateTime, default=_dt.datetime.utcnow)
-    date_last_updated = _sql.Column(_sql.DateTime, default=_dt.datetime.utcnow)
+class task(Base):
+    __tablename__ = "task"
 
-    owner = _orm.relationship("User", back_populates="posts")
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, index=True)
+    description = Column(String, index=True)
+    owner_id = Column(Integer, ForeignKey("users.id"))
+
+    owner = relationship("User", back_populates="task")
+    
